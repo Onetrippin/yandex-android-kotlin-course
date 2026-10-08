@@ -12,12 +12,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import org.slf4j.LoggerFactory
 import ru.servermonitor.app.ui.theme.ServerMonitorTheme
 
 class MainActivity : ComponentActivity() {
+    private val logger = LoggerFactory.getLogger(MainActivity::class.java)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
+        logger.info("Application started")
         enableEdgeToEdge()
         setContent {
             ServerMonitorTheme {
