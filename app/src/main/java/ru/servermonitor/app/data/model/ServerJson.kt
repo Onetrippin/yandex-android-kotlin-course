@@ -1,4 +1,4 @@
-package com.example.noname.data.model
+package ru.servermonitor.app.data.model
 
 import android.graphics.Color
 import org.json.JSONObject

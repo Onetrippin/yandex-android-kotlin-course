@@ -1,4 +1,4 @@
-package com.example.noname
+package ru.servermonitor.app
 
 import org.junit.Test
 

@@ -4,13 +4,13 @@ plugins {
 }
 
 android {
-    namespace = "com.example.noname"
+    namespace = "ru.servermonitor.app"
     compileSdk {
         version = release(36)
     }
 
     defaultConfig {
-        applicationId = "com.example.noname"
+        applicationId = "ru.servermonitor.app"
         minSdk = 29
         targetSdk = 36
         versionCode = 1
@@ -39,6 +39,7 @@ android {
 
 dependencies {
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))

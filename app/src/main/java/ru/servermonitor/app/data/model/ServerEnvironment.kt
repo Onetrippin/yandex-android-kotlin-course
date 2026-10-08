@@ -1,4 +1,4 @@
-package com.example.noname.data.model
+package ru.servermonitor.app.data.model
 
 enum class ServerEnvironment {
     DEVELOPMENT,

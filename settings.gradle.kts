@@ -19,6 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "noname"
+rootProject.name = "ServerMonitor"
 include(":app")
- 
