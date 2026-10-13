@@ -26,6 +26,13 @@ val Server.json: JSONObject
             )
         }
 
+        decommissionAt?.let { dateTime ->
+            put(
+                KEY_DECOMMISSION_AT,
+                dateTime.toInstant(ZoneOffset.UTC).toEpochMilli(),
+            )
+        }
+
         if (!isMonitoringEnabled) {
             put(KEY_IS_MONITORING_ENABLED, false)
         }
@@ -88,6 +95,21 @@ fun Server.Companion.parse(json: JSONObject): Server? {
             null
         }
 
+        val decommissionAt = if (
+            json.has(KEY_DECOMMISSION_AT) &&
+            !json.isNull(KEY_DECOMMISSION_AT)
+        ) {
+            val timestamp = (json.opt(KEY_DECOMMISSION_AT) as? Number)?.toLong()
+                ?: return null
+
+            LocalDateTime.ofInstant(
+                Instant.ofEpochMilli(timestamp),
+                ZoneOffset.UTC,
+            )
+        } else {
+            null
+        }
+
         val isMonitoringEnabled = if (json.has(KEY_IS_MONITORING_ENABLED)) {
             json.opt(KEY_IS_MONITORING_ENABLED) as? Boolean
                 ?: return null
@@ -103,6 +125,7 @@ fun Server.Companion.parse(json: JSONObject): Server? {
             environment = environment,
             labelColor = labelColor,
             maintenanceUntil = maintenanceUntil,
+            decommissionAt = decommissionAt,
             isMonitoringEnabled = isMonitoringEnabled,
         )
     }.getOrNull()
@@ -115,6 +138,7 @@ private const val KEY_PORT = "port"
 private const val KEY_ENVIRONMENT = "environment"
 private const val KEY_LABEL_COLOR = "labelColor"
 private const val KEY_MAINTENANCE_UNTIL = "maintenanceUntil"
+private const val KEY_DECOMMISSION_AT = "decommissionAt"
 private const val KEY_IS_MONITORING_ENABLED = "isMonitoringEnabled"
 private const val MIN_PORT = 1
 private const val MAX_PORT = 65_535

@@ -12,12 +12,14 @@ data class Server(
     val id: String = UUID.randomUUID().toString(),
     val labelColor: Int = Color.WHITE,
     val maintenanceUntil: LocalDateTime? = null,
+    val decommissionAt: LocalDateTime? = null,
     val isMonitoringEnabled: Boolean = true,
 ) {
     init {
         require(name.isNotBlank()) { "Server name must not be blank" }
         require(host.isNotBlank()) { "Server host must not be blank" }
         require(port in MIN_PORT..MAX_PORT) { "Server port is out of range" }
+        require(id.isNotBlank()) { "Server id must not be blank" }
     }
 
     companion object
