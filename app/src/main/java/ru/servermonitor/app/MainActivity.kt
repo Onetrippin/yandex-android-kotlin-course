@@ -4,12 +4,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Surface
-import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import org.slf4j.LoggerFactory
-import ru.servermonitor.app.ui.editor.ServerEditorRoute
+import ru.servermonitor.app.ui.ServerMonitorApp
 import ru.servermonitor.app.ui.theme.ServerMonitorTheme
 
 class MainActivity : ComponentActivity() {
@@ -22,9 +19,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ServerMonitorTheme {
-                Surface(modifier = Modifier.fillMaxSize()) {
-                    ServerEditorRoute()
-                }
+                ServerMonitorApp()
             }
         }
     }

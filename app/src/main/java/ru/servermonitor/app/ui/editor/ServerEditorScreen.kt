@@ -64,7 +64,6 @@ import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
-/** UI draft permits incomplete input, unlike the validated domain model. */
 internal data class ServerEditorDraft(
     val name: String = "Учебный сервер",
     val host: String = "127.0.0.1",
@@ -74,6 +73,7 @@ internal data class ServerEditorDraft(
     val monitoringEnabled: Boolean = true,
 )
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 internal fun ServerEditorScreen(
     draft: ServerEditorDraft,
@@ -86,12 +86,16 @@ internal fun ServerEditorScreen(
     onCustomEdit: () -> Unit,
     onDateClick: () -> Unit,
     scrollState: ScrollState,
+    isEditing: Boolean = true,
+    showValidationError: Boolean = false,
+    onCancel: () -> Unit = {},
+    onSave: () -> Unit = {},
 ) {
     Column(
         Modifier.widthIn(max = 600.dp).fillMaxWidth().verticalScroll(scrollState).padding(20.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        Text(stringResource(R.string.editor_title), style = MaterialTheme.typography.headlineSmall)
+        Text(stringResource(if (isEditing) R.string.editor_title else R.string.create_server_title), style = MaterialTheme.typography.headlineSmall)
         Card(
             colors = CardDefaults.cardColors(
                 containerColor = if (draft.monitoringEnabled) MaterialTheme.colorScheme.surfaceContainerLow
@@ -103,6 +107,7 @@ internal fun ServerEditorScreen(
                 ServerConnectionFields(
                     host = draft.host,
                     port = draft.port,
+                    showRequiredHostError = showValidationError,
                     onHostChange = { onDraftChange(draft.copy(host = it)) },
                     onPortChange = { onDraftChange(draft.copy(port = it)) },
                 )
@@ -114,6 +119,13 @@ internal fun ServerEditorScreen(
                 )
                 MonitoringToggle(draft.monitoringEnabled) { onDraftChange(draft.copy(monitoringEnabled = it)) }
             }
+        }
+        if (showValidationError) {
+            Text(stringResource(R.string.server_form_invalid), color = MaterialTheme.colorScheme.error)
+        }
+        FlowRow(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+            TextButton(onClick = onCancel) { Text(stringResource(R.string.cancel)) }
+            androidx.compose.material3.Button(onClick = onSave) { Text(stringResource(R.string.save)) }
         }
     }
 }
@@ -130,13 +142,28 @@ private fun ServerNameField(name: String, onNameChange: (String) -> Unit) {
 }
 
 @Composable
-private fun ServerConnectionFields(host: String, port: String, onHostChange: (String) -> Unit, onPortChange: (String) -> Unit) {
+private fun ServerConnectionFields(
+    host: String,
+    port: String,
+    showRequiredHostError: Boolean,
+    onHostChange: (String) -> Unit,
+    onPortChange: (String) -> Unit,
+) {
+    val invalidHost = (host.isNotEmpty() || showRequiredHostError) && !isValidServerHost(host)
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         OutlinedTextField(
             value = host, onValueChange = onHostChange,
             label = { Text(stringResource(R.string.server_host)) },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
+            isError = invalidHost,
+            supportingText = {
+                Text(stringResource(when {
+                    invalidHost && host.isBlank() -> R.string.server_host_required
+                    invalidHost -> R.string.invalid_server_host
+                    else -> R.string.server_host_hint
+                }))
+            },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Uri),
         )
         val invalidPort = port.isNotEmpty() && port.toIntOrNull()?.let { it in 1..65_535 } != true
@@ -185,7 +212,7 @@ private fun ServerColorSelector(
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Text(stringResource(R.string.label_color), style = MaterialTheme.typography.titleSmall)
         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            PALETTE_COLORS.forEachIndexed { index, color ->
+            serverLabelColors.forEachIndexed { index, color ->
                 ColorSwatch(
                     color = color,
                     isSelected = !customSelected && color.toArgb() == presetColor,
@@ -304,7 +331,7 @@ private val ServerEnvironment.labelRes: Int
         ServerEnvironment.PRODUCTION -> R.string.environment_production
     }
 
-private val PALETTE_COLORS = listOf(
+internal val serverLabelColors = listOf(
     Color(0xFFEF5350), Color(0xFFFF9800), Color(0xFFFFC107), Color(0xFF66BB6A),
     Color(0xFF26A69A), Color(0xFF42A5F5), Color(0xFF5C6BC0), Color(0xFFAB47BC),
     Color(0xFFEC407A), Color(0xFF795548), Color(0xFF607D8B), Color.White,

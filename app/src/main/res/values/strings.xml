@@ -1,19 +1,32 @@
 <resources>
     <string name="app_name">Монитор серверов</string>
     <string name="editor_title">Редактирование сервера</string>
+    <string name="create_server_title">Новый сервер</string>
+    <string name="save">Сохранить</string>
+    <string name="server_form_invalid">Проверьте название, адрес и порт от 1 до 65535.</string>
+    <string name="servers_title">Серверы</string>
+    <string name="no_servers">Список пуст. Добавьте сервер кнопкой «+».</string>
+    <string name="delete_server_title">Удалить сервер?</string>
+    <string name="delete_server_confirmation">Сервер «%1$s» будет удалён.</string>
+    <string name="delete">Удалить</string>
+    <string name="server_not_found">Сервер не найден</string>
+    <string name="back_to_servers">К списку серверов</string>
     <string name="server_name">Название сервера</string>
     <string name="server_host">Адрес сервера</string>
+    <string name="server_host_hint">Hostname или IP, без схемы, пути и порта</string>
+    <string name="server_host_required">Укажите адрес сервера</string>
+    <string name="invalid_server_host">Введите корректное имя хоста, IPv4 или IPv6</string>
     <string name="server_port">Порт</string>
     <string name="environment">Окружение</string>
-    <string name="environment_development">Разработка</string>
-    <string name="environment_staging">Тестирование</string>
-    <string name="environment_production">Продакшен</string>
+    <string name="environment_development">dev</string>
+    <string name="environment_staging">test</string>
+    <string name="environment_production">prod</string>
     <string name="label_color">Цветовая метка</string>
     <string name="maintenance_until">Обслуживание до</string>
     <string name="choose_date">Выбрать дату</string>
     <string name="clear">Очистить</string>
-    <string name="monitoring">Мониторинг включён</string>
-    <string name="monitoring_enabled">Сервер отображается как активный</string>
+    <string name="monitoring">Мониторинг</string>
+    <string name="monitoring_enabled">Мониторинг включён</string>
     <string name="monitoring_disabled">Мониторинг выключен</string>
     <string name="color_picker_title">Выбор цвета</string>
     <string name="brightness">Яркость</string>
@@ -30,4 +43,5 @@
     <string name="custom_color_hint">Удерживайте дополнительный квадрат, чтобы изменить свой цвет</string>
     <string name="color_selected">выбран</string>
     <string name="color_not_selected">не выбран</string>
+    <string name="add_server">Добавить сервер</string>
 </resources>
